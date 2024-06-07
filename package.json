@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "vercel": "^34.2.5"
+    "vercel": "^34.2.5",
+    "wrangler": "^3.59.0"
   },
   "name": "artyfycial_backend",
   "description": "This is to host the backend infrastructure for Artyfycial.",
