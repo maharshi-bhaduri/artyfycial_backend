@@ -1,3 +1,7 @@
+-- Migration number: 0002 	 2024-06-08T19:27:18.175Z
+
+-- Migration number: 0002 	 2024-06-08T19:24:32.853Z
+
 -- Migration number: 0001 	 2024-06-07T19:09:08.074Z
 
 -- Drop table if exists statements
@@ -7,7 +11,7 @@ DROP TABLE IF EXISTS artist;
 
 -- Table: artist
 CREATE TABLE artist (
-    artistId INT PRIMARY KEY AUTOINCREMENT,
+    artistId INTEGER PRIMARY KEY AUTOINCREMENT,
     firstName VARCHAR(255) NOT NULL,
     lastName VARCHAR(255) NOT NULL,
     about TEXT,
@@ -20,8 +24,8 @@ CREATE TABLE artist (
 
 -- Table: artwork
 CREATE TABLE artwork (
-    artworkId INT PRIMARY KEY AUTOINCREMENT,
-    artistId INT,
+    artworkId INTEGER PRIMARY KEY AUTOINCREMENT,
+    artistId INTEGER,
     title VARCHAR(255) NOT NULL,
     date DATE,
     description TEXT,
@@ -32,9 +36,9 @@ CREATE TABLE artwork (
 
 -- Table: exhibition
 CREATE TABLE exhibition (
-    exhibitionId INT PRIMARY KEY AUTOINCREMENT,
-    artistId INT,
-    artworkId INT,
+    exhibitionId INTEGER PRIMARY KEY AUTOINCREMENT,
+    artistId INTEGER,
+    artworkId INTEGER,
     title VARCHAR(255) NOT NULL,
     description TEXT,
     startDate DATE NOT NULL,
