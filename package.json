@@ -1,16 +1,12 @@
 {
   "dependencies": {
-<<<<<<< HEAD
     "dotenv": "^16.4.5",
     "finalhandler": "^1.2.0",
     "firebase": "^10.12.2",
     "firebase-admin": "^12.1.1",
     "router": "^1.3.8",
-    "vercel": "^34.2.6"
-=======
-    "vercel": "^34.2.5",
+    "vercel": "^34.2.6",
     "wrangler": "^3.59.0"
->>>>>>> 7e0eb9446ebc1aa247406f7e208b827004f3827f
   },
   "name": "artyfycial_backend",
   "description": "This is to host the backend infrastructure for Artyfycial.",
