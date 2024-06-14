@@ -1,10 +1,5 @@
 import * as admin from "firebase-admin";
-require("dotenv").config();
-
-//const admin = require("firebase-admin");
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
-console.log(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
-
 function resUtil(res, statuscode, message, data) {
   const response = {
     operationStatus: {
@@ -27,8 +22,6 @@ function verifyAuth(fn) {
     try {
       const decodedToken = await admin.auth().verifyIdToken(authorization);
       if (uid !== decodedToken.uid) {
-        console.log("req.headers.uid", uid);
-        console.log("decodedtoken.uid", decodedToken.uid);
         return resUtil(res, 401, "Unauthorized access detected");
       }
       console.log("Operation authorized, proceeding with request");
@@ -49,7 +42,6 @@ function verifyAuth(fn) {
 }
 
 const allowCors = (fn) => async (req, res) => {
-  console.log(serviceAccount);
   res.setHeader("Access-Control-Allow-Credentials", true);
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
