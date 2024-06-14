@@ -8,7 +8,7 @@ const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: "fir-storage-test-2e0a9.appspot.com",
+  storageBucket: serviceAccount.storageBucket,
 });
 
 const storage = admin.storage();
