@@ -18,7 +18,7 @@ const listFiles = async function (req, res) {
   try {
     const [files] = await bucket.getFiles({ prefix: 'images/' });
 
-    const fileInfos = await Promise.all(files.map(async file => {
+    const fileInfos = await Promise.all(files.slice(0, 6).map(async file => {
       const [url] = await file.getSignedUrl({
         action: 'read',
         expires: Date.now() + 60 * 60 * 1000 // Set expiration to 1 hour from now
