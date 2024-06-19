@@ -3,7 +3,7 @@ import * as formidable from "formidable-serverless";
 import * as fs from "fs";
 import * as util from "util";
 import { allowCors } from "../utils/utils"; // Adjust the path as needed
-
+import axios from "axios";
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
 
 admin.initializeApp({
@@ -36,16 +36,32 @@ const createImage = async function (req, res) {
 
       const fileRef = bucket.file(filePath);
 
-      // Upload file to Firebase Storage
-      await fileRef.save(fileBuffer, {
-        metadata: { contentType: file.type },
-      });
+      try {
+        // Upload file to Firebase Storage
+        await fileRef.save(fileBuffer, {
+          metadata: { contentType: file.type },
+        });
 
-      // Get the public URL of the uploaded file
-      const downloadURL = `https://storage.googleapis.com/${bucket.name}/${filePath}`;
+        // Get the public URL of the uploaded file
+        const downloadURL = `https://storage.googleapis.com/${bucket.name}/${filePath}`;
+        console.log("File is available at", downloadURL);
+        //axios post call
+        await axios.post(process.env.ADD_ARTWORK, {
+          artistId: 3,
+          title: "Avery smith files",
+          date: "2021-06-17",
+          description: "cs student turned artist",
+          active: true,
+          path: filePath,
+        });
 
-      console.log("File is available at", downloadURL);
-      return res.status(200).json({ imageUrl: downloadURL });
+        return res.status(200).json({ imageUrl: downloadURL });
+      } catch (error) {
+        console.log("Error uploading to cloudflare:", error);
+        // Rollback: Delete the uploaded image from Firebase Storage
+        await fileRef.delete();
+        return res.status(500).json({ error: "Error uploading image backend" });
+      }
     });
   } catch (error) {
     console.log("Error uploading image backend", error);
