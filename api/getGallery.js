@@ -17,7 +17,7 @@ const bucket = storage.bucket();
 const listFiles = async function (req, res) {
   try {
     const [files] = await bucket.getFiles({ prefix: 'images/' });
-
+    console.log(files)
     const fileInfos = await Promise.all(files.slice(0, 6).map(async file => {
       const [url] = await file.getSignedUrl({
         action: 'read',
@@ -28,8 +28,6 @@ const listFiles = async function (req, res) {
         url: url
       };
     }));
-
-    console.log('Files:', fileInfos);
 
     return res.status(200).json({ files: fileInfos });
   } catch (error) {
