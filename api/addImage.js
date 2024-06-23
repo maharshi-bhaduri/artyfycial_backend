@@ -46,14 +46,17 @@ const createImage = async function (req, res) {
         const downloadURL = `https://storage.googleapis.com/${bucket.name}/${filePath}`;
         console.log("File is available at", downloadURL);
         //axios post call
-        await axios.post(process.env.ADD_ARTWORK, {
+        await axios.post(process.env.CF_ADD_ARTWORK_DATA, {
           artistId: 3,
           title: "Avery smith files",
-          date: "2021-06-17",
+          uploadDate: "2021-06-17",
           description: "cs student turned artist",
-          active: true,
+          isActive: true,
           path: filePath,
+          isPublic: true,
+          clickCount: 0
         });
+
 
         return res.status(200).json({ imageUrl: downloadURL });
       } catch (error) {
