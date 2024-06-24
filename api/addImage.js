@@ -24,43 +24,40 @@ const createImage = async function (req, res) {
         return res.status(500).json({ error: "Error parsing form data" });
       }
 
-      const file = files.image;
-      if (!file) {
+      const imageFile = files.image;
+      const data = fields.data ? JSON.parse(fields.data) : {};
+      console.log("data is ", data);
+      if (!imageFile) {
         return res.status(400).json({ error: "No image provided" });
       }
 
       const readFile = util.promisify(fs.readFile);
-      const fileBuffer = await readFile(file.path);
+      const fileBuffer = await readFile(imageFile.path);
 
-      const filePath = `images/${file.name}`;
+      const filePath = `images/${imageFile.name}`;
 
       const fileRef = bucket.file(filePath);
 
       try {
         // Upload file to Firebase Storage
         await fileRef.save(fileBuffer, {
-          metadata: { contentType: file.type },
+          metadata: { contentType: imageFile.type },
         });
 
         // Get the public URL of the uploaded file
         const downloadURL = `https://storage.googleapis.com/${bucket.name}/${filePath}`;
         console.log("File is available at", downloadURL);
         //axios post call
-        await axios.post(process.env.CF_ADD_ARTWORK_DATA, {
-          artistId: 3,
-          title: "Avery smith files",
-          uploadDate: "2021-06-17",
-          description: "cs student turned artist",
-          isActive: true,
-          path: filePath,
-          isPublic: true,
-          clickCount: 0
+        await axios.post(process.env.CF_ADD_ARTWORK_DATA, data, {
+          "Content-Type": "application/json",
         });
-
 
         return res.status(200).json({ imageUrl: downloadURL });
       } catch (error) {
-        console.log("Error uploading to cloudflare:", error);
+        console.log(
+          "Error saving artwork details (firebase/cloudflare):",
+          error
+        );
         // Rollback: Delete the uploaded image from Firebase Storage
         await fileRef.delete();
         return res.status(500).json({ error: "Error uploading image backend" });
