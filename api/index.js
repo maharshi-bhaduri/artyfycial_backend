@@ -1,10 +1,10 @@
 import Router from "router";
 import finalhandler from "finalhandler";
-const getTime = require("./getTime");
-const addImage = require("./addImage");
-const getGallery = require("./getGallery");
-const getFeed = require("./getFeed");
-import { allowCors } from "../utils/utils";
+import getTime from "./getTime.js";
+import addImage from "./addImage.js";
+import getGallery from "./getGallery.js";
+import getFeed from "./getFeed.js";
+import { allowCors } from "../utils/utils.js";
 
 const router = Router();
 router.get("/api/getTime", getTime);

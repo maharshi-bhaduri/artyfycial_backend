@@ -1,6 +1,6 @@
-import * as admin from "firebase-admin";
+import admin from 'firebase-admin';
 import axios from "axios";
-import { allowCors } from "../utils/utils"; // Adjust the path as needed
+import { allowCors } from "../utils/utils.js"; // Adjust the path as needed
 
 // Check if the app is already initialized
 if (!admin.apps.length) {
@@ -46,4 +46,4 @@ const listFiles = async function (req, res) {
     }
 };
 
-module.exports = allowCors(listFiles);
+export default allowCors(listFiles);

@@ -1,8 +1,8 @@
-import * as admin from "firebase-admin";
+import admin from 'firebase-admin';
 import * as formidable from "formidable-serverless";
 import * as fs from "fs";
 import * as util from "util";
-import { allowCors } from "../utils/utils"; // Adjust the path as needed
+import { allowCors } from "../utils/utils.js"; // Adjust the path as needed
 import axios from "axios";
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
 
@@ -69,4 +69,4 @@ const createImage = async function (req, res) {
   }
 };
 
-module.exports = allowCors(createImage);
+export default allowCors(createImage);

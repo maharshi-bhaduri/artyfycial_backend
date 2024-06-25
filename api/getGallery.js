@@ -1,14 +1,18 @@
-import * as admin from "firebase-admin";
-import { allowCors } from "../utils/utils"; // Adjust the path as needed
+import admin from 'firebase-admin';
+import { allowCors } from "../utils/utils.js"; // Adjust the path as needed
 
 // Check if the app is already initialized
 if (!admin.apps.length) {
-  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+  try {
+    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+      storageBucket: serviceAccount.storageBucket,
+    });
 
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    storageBucket: serviceAccount.storageBucket,
-  });
+  } catch (error) {
+    console.error('Error initializing Firebase:', error);
+  }
 }
 
 const storage = admin.storage();
@@ -36,4 +40,4 @@ const listFiles = async function (req, res) {
   }
 };
 
-module.exports = allowCors(listFiles);
+export default allowCors(listFiles);
