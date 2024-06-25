@@ -1,22 +1,10 @@
-import admin from 'firebase-admin';
 import axios from "axios";
-import { allowCors } from "../utils/utils.js"; // Adjust the path as needed
+import { allowCors, getBucket } from "../utils/utils.js"; // Adjust the path as needed
 
-// Check if the app is already initialized
-if (!admin.apps.length) {
-    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
 
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-        storageBucket: serviceAccount.storageBucket,
-    });
-}
-
-const storage = admin.storage();
-const bucket = storage.bucket();
-
-const listFiles = async function (req, res) {
+const getFeed = async function (req, res) {
     try {
+        const bucket = getBucket();
         // Fetch data from the getdata API
         const response = await axios.get(process.env.CF_GET_FEED_DATA, {
             params: {
@@ -46,4 +34,4 @@ const listFiles = async function (req, res) {
     }
 };
 
-export default allowCors(listFiles);
+export default allowCors(getFeed);

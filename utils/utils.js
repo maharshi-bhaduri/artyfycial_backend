@@ -1,7 +1,16 @@
-import * as admin from "firebase-admin";
+import admin from "firebase-admin";
 
+const getBucket = () => {
+  if (!admin.apps.length) {
+    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
 
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+      storageBucket: serviceAccount.storageBucket,
+    });
+  }
+  return admin.storage().bucket();
+};
 
 function resUtil(res, statuscode, message, data) {
   const response = {
@@ -68,4 +77,4 @@ const allowCors = (fn) => async (req, res) => {
   }
 };
 
-export { allowCors, resUtil, verifyAuth };
+export { allowCors, resUtil, verifyAuth, getBucket };
