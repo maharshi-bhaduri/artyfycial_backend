@@ -1,21 +1,13 @@
-import admin from 'firebase-admin';
 import * as formidable from "formidable-serverless";
 import * as fs from "fs";
 import * as util from "util";
-import { allowCors } from "../utils/utils.js"; // Adjust the path as needed
+import { allowCors, getBucket } from "../utils/utils.js"; // Adjust the path as needed
 import axios from "axios";
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  storageBucket: serviceAccount.storageBucket,
-});
 
-const storage = admin.storage();
-const bucket = storage.bucket();
-
-const createImage = async function (req, res) {
+const addImage = async function (req, res) {
   try {
+    const bucket = getBucket();
     const form = new formidable.IncomingForm();
 
     form.parse(req, async (err, fields, files) => {
@@ -69,4 +61,4 @@ const createImage = async function (req, res) {
   }
 };
 
-export default allowCors(createImage);
+export default allowCors(addImage);
