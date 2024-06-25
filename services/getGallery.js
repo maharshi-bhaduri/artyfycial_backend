@@ -5,7 +5,6 @@ const getGallery = async function (req, res) {
   try {
     const bucket = getBucket();
     const [files] = await bucket.getFiles({ prefix: 'images/' });
-    console.log(files)
     const fileInfos = await Promise.all(files.slice(0, 6).map(async file => {
       const [url] = await file.getSignedUrl({
         action: 'read',
