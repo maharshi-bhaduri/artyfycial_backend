@@ -1,5 +1,8 @@
 import * as admin from "firebase-admin";
+
+
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+
 function resUtil(res, statuscode, message, data) {
   const response = {
     operationStatus: {
@@ -65,4 +68,4 @@ const allowCors = (fn) => async (req, res) => {
   }
 };
 
-module.exports = { allowCors, resUtil, verifyAuth };
+export { allowCors, resUtil, verifyAuth };
