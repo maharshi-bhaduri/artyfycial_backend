@@ -1,4 +1,4 @@
-import * as formidable from "formidable-serverless";
+import formidable from "formidable-serverless";
 import * as fs from "fs";
 import * as util from "util";
 import { allowCors, getBucket } from "../utils/utils.js"; // Adjust the path as needed
@@ -27,6 +27,7 @@ const addImage = async function (req, res) {
       const fileBuffer = await readFile(imageFile.path);
 
       const filePath = `images/${imageFile.name}`;
+      data['path'] = filePath;
 
       const fileRef = bucket.file(filePath);
 
