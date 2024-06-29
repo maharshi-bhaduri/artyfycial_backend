@@ -1,8 +1,9 @@
 import { allowCors, getBucket } from "../utils/utils.js"; // Adjust the path as needed
 import axios from "axios";
 
-const deleteImage = async function (req, res) {
+const deleteArtwork = async function (req, res) {
   try {
+    console.log("called delete artwork")
     const bucket = getBucket();
     const { artworkId } = req.body;
 
@@ -12,7 +13,7 @@ const deleteImage = async function (req, res) {
 
     try {
       // Fetch the artwork details from the database
-      const response = await axios.get(`${process.env.CF_GET_ARTWORK_DATA}/${artworkId}`, {
+      const response = await axios.get(`${process.env.CF_GET_ARTWORK_DATA}?artworkId=${artworkId}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -48,4 +49,4 @@ const deleteImage = async function (req, res) {
   }
 };
 
-export default allowCors(deleteImage);
+export default allowCors(deleteArtwork);
