@@ -6,6 +6,7 @@ import getGallery from "../services/getGallery.js";
 import getFeed from "../services/getFeed.js";
 import getArtworkDetails from "../services/getArtworkDetails.js";
 import deleteArtwork from "../services/deleteArtwork.js";
+import updateArtwork from "../services/updateArtwork.js";
 import { allowCors } from "../utils/utils.js";
 
 
@@ -16,10 +17,12 @@ router.get("/api/getGallery", getGallery);
 router.get("/api/getFeed", getFeed);
 router.post("/api/deleteArtwork", deleteArtwork);
 router.get("/api/getArtworkDetails", getArtworkDetails);
+router.post("/api/updateArtwork", updateArtwork);
 
 function getRoutes(req, res) {
   console.log(`Received request: ${req.method} ${req.url}`);
   router(req, res, finalhandler(req, res));
 }
 
-export default allowCors(getRoutes);
+// export default allowCors(getRoutes);
+export default getRoutes;
