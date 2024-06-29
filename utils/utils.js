@@ -70,6 +70,8 @@ const allowCors = (fn) => async (req, res) => {
     return;
   }
   try {
+    console.log("break!")
+    console.log("func name: ", fn)
     await fn(req, res);
   } catch (error) {
     console.error("An error occurred:", error);
