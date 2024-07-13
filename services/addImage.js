@@ -3,7 +3,10 @@ import * as fs from "fs";
 import * as util from "util";
 import { allowCors, getBucket } from "../utils/utils.js"; // Adjust the path as needed
 import axios from "axios";
+import Jimp from "jimp";
+import crypto from "crypto";
 
+const MAX_SIZE = 200 * 1024; // 200 KB
 
 const addImage = async function (req, res) {
   try {
@@ -26,23 +29,52 @@ const addImage = async function (req, res) {
       const readFile = util.promisify(fs.readFile);
       const fileBuffer = await readFile(imageFile.path);
 
-      const filePath = `images/${imageFile.name}`;
+      let quality = 80; // Starting quality
+      let resizedBuffer;
+
+      let image = await Jimp.read(fileBuffer);
+
+      // Resize to 1024 width while maintaining aspect ratio
+      image.resize(1024, Jimp.AUTO);
+
+      // Compress the image and adjust quality
+      resizedBuffer = await image.quality(quality).getBufferAsync(Jimp.MIME_JPEG);
+
+      // Dynamically reduce quality until the image is under 200 KB
+      while (resizedBuffer.length > MAX_SIZE && quality > 10) {
+        quality -= 5;
+        resizedBuffer = await image.quality(quality).getBufferAsync(Jimp.MIME_JPEG);
+      }
+
+      if (resizedBuffer.length > MAX_SIZE) {
+        return res.status(500).json({ error: "Unable to reduce image size under 200 KB" });
+      }
+
+      // Generate a unique file name
+      const timestamp = Date.now().toString();
+      const randomNum = Math.floor(Math.random() * 10000).toString();
+      const hash = crypto.createHash('sha256').update(timestamp + randomNum).digest('hex');
+      const filePath = `images/${hash}.jpeg`;
+
       data['path'] = filePath;
 
       const fileRef = bucket.file(filePath);
 
       try {
         // Upload file to Firebase Storage
-        await fileRef.save(fileBuffer, {
-          metadata: { contentType: imageFile.type },
+        await fileRef.save(resizedBuffer, {
+          metadata: { contentType: Jimp.MIME_JPEG },
         });
 
         // Get the public URL of the uploaded file
         const downloadURL = `https://storage.googleapis.com/${bucket.name}/${filePath}`;
         console.log("File is available at", downloadURL);
-        //axios post call
+
+        // Axios post call
         await axios.post(process.env.CF_ADD_ARTWORK_DATA, data, {
-          "Content-Type": "application/json",
+          headers: {
+            "Content-Type": "application/json",
+          },
         });
 
         return res.status(200).json({ imageUrl: downloadURL });
