@@ -6,7 +6,7 @@ import axios from "axios";
 import Jimp from "jimp";
 import crypto from "crypto";
 
-const MAX_SIZE = 200 * 1024; // 200 KB
+const MAX_SIZE = 250 * 1024; // 250 KB
 
 const addImage = async function (req, res) {
   try {
@@ -29,26 +29,32 @@ const addImage = async function (req, res) {
       const readFile = util.promisify(fs.readFile);
       const fileBuffer = await readFile(imageFile.path);
 
-      let quality = 80; // Starting quality
+      let quality = 100; // Starting quality
       let resizedBuffer;
 
       let image = await Jimp.read(fileBuffer);
 
-      // Resize to 1024 width while maintaining aspect ratio
-      image.resize(1024, Jimp.AUTO);
+      // Only resize if the image is larger than 1024 pixels wide
+      if (image.bitmap.width > 1024) {
+        image.resize(1024, Jimp.AUTO);
+      }
 
       // Compress the image and adjust quality
-      resizedBuffer = await image.quality(quality).getBufferAsync(Jimp.MIME_JPEG);
+      resizedBuffer = await image.getBufferAsync(Jimp.MIME_JPEG);
 
-      // Dynamically reduce quality until the image is under 200 KB
+      console.log("initial size: ", resizedBuffer.length)
+
+      // Dynamically reduce quality until the image is under 250 KB
       while (resizedBuffer.length > MAX_SIZE && quality > 10) {
         quality -= 5;
         resizedBuffer = await image.quality(quality).getBufferAsync(Jimp.MIME_JPEG);
       }
 
       if (resizedBuffer.length > MAX_SIZE) {
-        return res.status(500).json({ error: "Unable to reduce image size under 200 KB" });
+        return res.status(500).json({ error: "Unable to reduce image size under 250 KB" });
       }
+
+      console.log("final size: ", resizedBuffer.length)
 
       // Generate a unique file name
       const timestamp = Date.now().toString();
