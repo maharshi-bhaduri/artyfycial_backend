@@ -1,23 +1,14 @@
-import axios from "axios";
 import { allowCors, getBucket } from "../utils/utils.js";
 
-const getArtworkList = async function (req, res) {
+const getArtworkListNew = async function (req, res) {
     try {
+        console.log("hello")
         const bucket = getBucket();
-        const { artistId, current, searchQuery, searchOthers, limit } = req.query;
+        const { artworks } = req.body; // Extract the list of artwork objects from the request body
 
-        // Fetch data from the getMoreArtworks API
-        const response = await axios.get(process.env.CF_GET_ARTWORK_LIST_DATA, {
-            params: {
-                artistId,
-                current,
-                searchQuery,
-                searchOthers,
-                limit
-            },
-        });
-
-        const artworks = response.data;
+        if (!Array.isArray(artworks) || artworks.length === 0) {
+            return res.status(400).json({ error: 'Invalid artworks list' });
+        }
 
         // Generate presigned URLs for each artwork path
         const updatedArtworks = await Promise.all(artworks.map(async (artwork) => {
@@ -31,6 +22,7 @@ const getArtworkList = async function (req, res) {
                 url: url,
             };
         }));
+        console.log("updatedArtworks ", updatedArtworks)
 
         return res.status(200).json({ artworks: updatedArtworks });
     } catch (error) {
@@ -39,4 +31,4 @@ const getArtworkList = async function (req, res) {
     }
 };
 
-export default allowCors(getArtworkList);
+export default allowCors(getArtworkListNew);

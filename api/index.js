@@ -9,7 +9,9 @@ import deleteArtwork from "../services/deleteArtwork.js";
 import updateArtwork from "../services/updateArtwork.js";
 import getArtworkList from "../services/getArtworkList.js";
 import getPortfolio from "../services/getPortfolio.js";
+import getArtworkListNew from "../services/getArtworkListNew.js";
 import { allowCors } from "../utils/utils.js";
+
 
 
 const router = Router();
@@ -22,6 +24,7 @@ router.get("/api/getArtworkDetails", getArtworkDetails);
 router.post("/api/updateArtwork", updateArtwork);
 router.get("/api/getArtworkList", getArtworkList);
 router.get("/api/getPortfolio", getPortfolio);
+router.post("/api/getArtworkListNew", getArtworkListNew);
 
 function getRoutes(req, res) {
   console.log(`Received request: ${req.method} ${req.url}`);
@@ -29,4 +32,4 @@ function getRoutes(req, res) {
 }
 
 // export default allowCors(getRoutes);
-export default allowCors(getRoutes);
+export default getRoutes;
