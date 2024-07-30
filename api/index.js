@@ -9,8 +9,11 @@ import deleteArtwork from "../services/deleteArtwork.js";
 import updateArtwork from "../services/updateArtwork.js";
 import getArtworkList from "../services/getArtworkList.js";
 import getPortfolio from "../services/getPortfolio.js";
+import getMarketPlace from "../services/getMarketPlace.js";
 import getArtworkListNew from "../services/getArtworkListNew.js";
 import { allowCors } from "../utils/utils.js";
+
+
 
 
 
@@ -24,6 +27,7 @@ router.get("/api/getArtworkDetails", getArtworkDetails);
 router.post("/api/updateArtwork", updateArtwork);
 router.get("/api/getArtworkList", getArtworkList);
 router.get("/api/getPortfolio", getPortfolio);
+router.get("/api/getMarketPlace", getMarketPlace);
 router.post("/api/getArtworkListNew", getArtworkListNew);
 
 function getRoutes(req, res) {
