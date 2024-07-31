@@ -9,7 +9,6 @@ const getArtworkListNew = async function (req, res) {
     if (!Array.isArray(artworks) || artworks.length === 0) {
       return res.status(400).json({ error: "Invalid artworks list" });
     }
-
     // Generate presigned URLs for each artwork path
     const updatedArtworks = await Promise.all(
       artworks.map(async (artwork) => {

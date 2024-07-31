@@ -13,6 +13,10 @@ import getMarketPlace from "../services/getMarketPlace.js";
 import getArtworkListNew from "../services/getArtworkListNew.js";
 import { allowCors } from "../utils/utils.js";
 
+
+
+
+
 const router = Router();
 router.get("/api/getTime", getTime);
 router.post("/api/addImage", addImage);
@@ -32,4 +36,4 @@ function getRoutes(req, res) {
 }
 
 // export default allowCors(getRoutes);
-export default allowCors(getRoutes);
+export default getRoutes;

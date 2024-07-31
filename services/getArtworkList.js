@@ -4,13 +4,16 @@ import { allowCors, getBucket } from "../utils/utils.js";
 const getArtworkList = async function (req, res) {
     try {
         const bucket = getBucket();
-        const { artistId, current } = req.query;
+        const { artistId, current, searchQuery, searchOthers, limit } = req.query;
 
         // Fetch data from the getMoreArtworks API
         const response = await axios.get(process.env.CF_GET_ARTWORK_LIST_DATA, {
             params: {
                 artistId,
-                current
+                current,
+                searchQuery,
+                searchOthers,
+                limit
             },
         });
 
