@@ -32,4 +32,4 @@ function getRoutes(req, res) {
 }
 
 export default allowCors(getRoutes);
-//export default getRoutes;
+// export default getRoutes;
