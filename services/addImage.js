@@ -42,27 +42,34 @@ const addImage = async function (req, res) {
       // Compress the image and adjust quality
       resizedBuffer = await image.getBufferAsync(Jimp.MIME_JPEG);
 
-      console.log("initial size: ", resizedBuffer.length)
+      console.log("initial size: ", resizedBuffer.length);
 
       // Dynamically reduce quality until the image is under 250 KB
       while (resizedBuffer.length > MAX_SIZE && quality > 10) {
         quality -= 5;
-        resizedBuffer = await image.quality(quality).getBufferAsync(Jimp.MIME_JPEG);
+        resizedBuffer = await image
+          .quality(quality)
+          .getBufferAsync(Jimp.MIME_JPEG);
       }
 
       if (resizedBuffer.length > MAX_SIZE) {
-        return res.status(500).json({ error: "Unable to reduce image size under 250 KB" });
+        return res
+          .status(500)
+          .json({ error: "Unable to reduce image size under 250 KB" });
       }
 
-      console.log("final size: ", resizedBuffer.length)
+      console.log("final size: ", resizedBuffer.length);
 
       // Generate a unique file name
       const timestamp = Date.now().toString();
       const randomNum = Math.floor(Math.random() * 10000).toString();
-      const hash = crypto.createHash('sha256').update(timestamp + randomNum).digest('hex');
+      const hash = crypto
+        .createHash("sha256")
+        .update(timestamp + randomNum)
+        .digest("hex");
       const filePath = `images/${hash}.jpeg`;
 
-      data['path'] = filePath;
+      data["path"] = filePath;
 
       const fileRef = bucket.file(filePath);
 
@@ -100,4 +107,4 @@ const addImage = async function (req, res) {
   }
 };
 
-export default allowCors(addImage);
+export default addImage;
