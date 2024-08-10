@@ -31,5 +31,5 @@ function getRoutes(req, res) {
   router(req, res, finalhandler(req, res));
 }
 
-// export default allowCors(getRoutes);
-export default getRoutes;
+export default allowCors(getRoutes);
+// export default getRoutes;
