@@ -69,7 +69,7 @@ const addImage = async function (req, res) {
       try {
         // Upload file to Firebase Storage
         await fileRef.save(resizedBuffer, {
-          metadata: { contentType: Jimp.MIME_JPEG },
+          metadata: { contentType: Jimp.MIME_JPEG, cacheControl: 'public, max-age=86400' },
         });
 
         // Get the public URL of the uploaded file
