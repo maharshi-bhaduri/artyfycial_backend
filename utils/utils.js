@@ -1,5 +1,17 @@
 import admin from "firebase-admin";
-
+import { initializeApp } from "firebase/app";
+import {
+  doc,
+  collection,
+  addDoc,
+  serverTimestamp,
+  onSnapshot,
+  getFirestore,
+  getDocs,
+} from "firebase/firestore";
+const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 const getBucket = () => {
   if (!admin.apps.length) {
@@ -78,4 +90,16 @@ const allowCors = (fn) => async (req, res) => {
   }
 };
 
-export { allowCors, resUtil, verifyAuth, getBucket };
+export {
+  allowCors,
+  resUtil,
+  verifyAuth,
+  getBucket,
+  db,
+  doc,
+  onSnapshot,
+  collection,
+  getDocs,
+  serverTimestamp,
+  addDoc,
+};
