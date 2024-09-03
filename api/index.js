@@ -11,6 +11,8 @@ import getArtworkList from "../services/getArtworkList.js";
 import getPortfolio from "../services/getPortfolio.js";
 import getMarketPlace from "../services/getMarketPlace.js";
 import getArtworkListNew from "../services/getArtworkListNew.js";
+import addBidtoFirestore from "../services/addBidToFirestore.js";
+
 import { allowCors } from "../utils/utils.js";
 
 const router = Router();
@@ -25,6 +27,7 @@ router.get("/api/getArtworkList", getArtworkList);
 router.get("/api/getPortfolio", getPortfolio);
 router.get("/api/getMarketPlace", getMarketPlace);
 router.post("/api/getArtworkListNew", getArtworkListNew);
+router.post("/api/addBidstoFirestore", addBidtoFirestore);
 
 function getRoutes(req, res) {
   console.log(`Received request: ${req.method} ${req.url}`);
